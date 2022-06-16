@@ -12,7 +12,7 @@ class Navbar extends Component {
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    Eth Swap
+                    ToDo List
                 </a>
                 <ul className='navbar-nav px-3'>
                     <li className='nav-item text-nonwrap d-none d-sm-none d-sm-block'>
