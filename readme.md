@@ -67,10 +67,7 @@
 	pragma solidity >=0.4.22 <0.9.0;
 	```
 - Add below snippet in `truffle-config.js`.
-	```json
-	require('babel-register');
-	require('babel-polyfill');
-
+	```js
 	module.exports = {
 	  networks: {
 	    development: {
