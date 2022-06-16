@@ -1,6 +1,3 @@
-require('babel-register');
-require('babel-polyfill');
-
 module.exports = {
   networks: {
     development: {
@@ -16,8 +13,7 @@ module.exports = {
       optimizer: {
         enabled: true,
         runs: 200
-      },
-      evmVersion: "petersburg"
+      }
     }
   }
 }

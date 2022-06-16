@@ -8,6 +8,7 @@ contract TodoList {
 
 	uint public taskCount = 0;
 
+
 	struct Task {
 	    uint id;
 	    string content;
@@ -26,5 +27,13 @@ contract TodoList {
 	    // emit TaskCreated(taskCount, _content, false);
   	}
 
+  	// function gettaskCount() public view returns(uint){
+	  //   return taskCount;
+  	// }
+
+  	// function getTask(uint _index) public view returns(string memory text){
+  	// 	Task storage todo = tasks[_index];
+  	// 	return todo.content;
+  	// }
 
 }
