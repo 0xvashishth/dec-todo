@@ -87,7 +87,9 @@ class App extends Component {
       todocount: '0',
       ethBalance: '0',
       loading: true,
-      taskList: []
+      taskList: [],
+      indexNumber: '0',
+      taskText: '11',
     }
   }
 
@@ -101,6 +103,8 @@ class App extends Component {
         todocount={this.state.todocount}
         addTask={this.addTask}
         taskList={this.state.taskList}
+        indexNumber={this.state.indexNumber}
+        taskText={this.state.taskText}
       />
     }
 
