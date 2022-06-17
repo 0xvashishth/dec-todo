@@ -1,65 +1,93 @@
 import React, { Component } from "react";
 import "./App.css";
 
-import Modal from 'react-bootstrap/Modal'
-import ModalHeader from 'react-bootstrap/ModalHeader'
-import ModalBody from 'react-bootstrap/ModalBody'
-import ModalFooter from 'react-bootstrap/ModalFooter'
-import Button from 'react-bootstrap/Button'
-
+import Modal from "react-bootstrap/Modal";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalFooter from "react-bootstrap/ModalFooter";
+import Button from "react-bootstrap/Button";
 
 class Main extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            demoModal: false,
-            edittext: ""
-        };
-        this.toggle = this.toggle.bind(this);
-        // this.myfun = this.myfun.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      demoModal: false,
+      edittext: "",
+      editid: "0",
     };
-    toggle(val) {
-      var items = this.props.taskList;  
-      this.state.edittext = items[val.target.value]
-      this.setState({demoModal: !this.state.demoModal});
-    }
+    this.toggle = this.toggle.bind(this);
+    this.addToggle = this.addToggle.bind(this);
+  }
+  toggle(val) {
+    var items = this.props.taskList;
+    this.state.edittext = items[val.target.value];
+    this.setState({ demoModal: !this.state.demoModal });
+    this.setState({ editid: val.target.value });
+  }
+
+  addToggle(event) {
+    event.preventDefault();
+    let task_id;
+    task_id = event.target.value;
+    this.props.addToggle(task_id);
+  }
 
   render() {
-    // function myfun(val){
-    //   console.log("hii")
-    //   // var e = this.toggle
-    //   this.setState({demoModal: !this.state.demoModal});
-    // }
-
     var items = this.props.taskList;
+    var completeditems = this.props.completedList;
+    console.log(completeditems);
     var elements = [];
-    for (var i = 1; i<= this.props.todocount ; i++) {
+    var elementscompleted = [];
+
+    for (var i = 1; i <= this.props.todocount; i++) {
       if (!items[i]) {
-        break;
       } else {
         elements[i] = React.createElement("tr", {}, [
-          React.createElement("td", {}, items[i]),React.createElement("button", { class: "btn btn-danger", value: i , onClick: this.toggle.bind(this)  }, 'edit')
+          React.createElement("td", {}, items[i]),
+          React.createElement(
+            "button",
+            {
+              class: "btn btn-primary btnedit",
+              value: i,
+              onClick: this.toggle.bind(this),
+            },
+            "edit"
+          ),
+          React.createElement(
+            "button",
+            {
+              class: "btn btn-danger btnedit",
+              value: i,
+              onClick: this.addToggle.bind(this),
+            },
+            "Done"
+          ),
         ]);
       }
     }
-    // console.log(items)1
+    for (var i = 1; i <= this.props.todocount; i++) {
+      if (!completeditems[i]) {
+      } else {
+        elementscompleted[i] = React.createElement("tr", {}, [
+          React.createElement("td", {}, completeditems[i]),
+          React.createElement(
+            "button",
+            {
+              class: "btn btn-danger btnedit",
+              value: i,
+              onClick: this.addToggle.bind(this),
+            },
+            "unDone"
+          ),
+        ]);
+      }
+    }
     let etherAmount = this.props.ethBalance;
     etherAmount = window.web3.utils.fromWei(etherAmount, "Ether");
-    // console.log(this.props.taskList)
     return (
       <div>
-        <h2>Eth Balance : {etherAmount}</h2>
-        <h3>Todo Count : {this.props.todocount}</h3>
-        {/*<h4>a{this.props.taskList}</h4>*/}
-
-        <table className="table table-bordered">
-          <tbody>
-            <tr>
-              <th>List Iteams</th>
-            </tr>
-            <td>{elements}</td>
-          </tbody>
-        </table>
+        <h4>Eth Balance : {etherAmount}</h4>
+        <h4>Todo Count : {this.props.todocount}</h4>
 
         <form
           className="mb-3"
@@ -67,7 +95,6 @@ class Main extends Component {
             event.preventDefault();
             let task_content;
             task_content = this.input.value;
-            // console.log(task_content)
             this.props.addTask(task_content);
           }}
         >
@@ -82,27 +109,69 @@ class Main extends Component {
             name="task"
           />
           <br />
-          <button type="submit" className="btn btn-primary btn-lg">
+          <button type="submit" className="btn btn-primary btn-lg btnsubmit">
             Submit
           </button>
         </form>
+        <table className="table table-bordered">
+          <tbody>
+            <tr>
+              <th>Todo Iteams</th>
+            </tr>
+            <td>{elements}</td>
+          </tbody>
+        </table>
+
+        <table className="table table-bordered">
+          <tbody>
+            <tr>
+              <th>Completed Iteams</th>
+            </tr>
+            <td>{elementscompleted}</td>
+          </tbody>
+        </table>
         <div>
-        <button className="btn btn-primary btn-lg" onClick={ this.toggle}>Modal</button>
-        <Modal scrollable={true} show={this.state.demoModal} fade={false} style={{ display: "block"}}>
-                    <ModalHeader toggle={this.toggle}>
-                        Edit ToDo Task
-                    </ModalHeader>
-                    <ModalBody>
-                        <label>Edit Task Below</label><br/>
-                        <input type="text" value={this.state.edittext} name="edittask" className="input form-input " />
-                    </ModalBody>
-                    <ModalFooter>
-                      <button className="btn btn-primary">Submit</button>
-                        <Button className="btn btn-secondary" onClick={ this.toggle}>
-                            Close
-                        </Button>
-                    </ModalFooter>
-                </Modal>    
+          <Modal
+            scrollable={true}
+            show={this.state.demoModal}
+            fade={false}
+            style={{ display: "block" }}
+          >
+            <ModalHeader toggle={this.toggle}>Edit ToDo Task</ModalHeader>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                let new_task_content;
+                new_task_content = this.input.value;
+                let id = this.state.editid;
+                // console.log(this.state.editid)
+                // console.log(new_task_content)
+                this.props.editTask(id, new_task_content);
+              }}
+            >
+              <ModalBody>
+                <label>Edit Task Below</label>
+                <br />
+                <input
+                  type="text"
+                  placeholder={this.state.edittext}
+                  ref={(input) => {
+                    this.input = input;
+                  }}
+                  name="edittask"
+                  className="form-control"
+                />
+              </ModalBody>
+              <ModalFooter>
+                <button className="btn btn-primary" type="submit">
+                  Submit
+                </button>
+                <Button className="btn btn-secondary" onClick={this.toggle}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </form>
+          </Modal>
         </div>
       </div>
     );

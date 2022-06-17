@@ -1,1 +1,8 @@
 /* Styles go here */
+.btnedit {
+  margin-left: 10px;
+  margin-top: 5px;
+}
+.btnsubmit {
+  margin-top: -10px;
+}
